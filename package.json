@@ -16,5 +16,10 @@
   "bugs": {
     "url": "https://github.com/Marcelo-maga/Manga-download/issues"
   },
-  "homepage": "https://github.com/Marcelo-maga/Manga-download#readme"
+  "homepage": "https://github.com/Marcelo-maga/Manga-download#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "got": "^11.8.2",
+    "puppeteer": "^10.2.0"
+  }
 }
