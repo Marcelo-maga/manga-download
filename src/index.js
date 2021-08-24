@@ -38,7 +38,7 @@ app.get(`/main/:id/`, async (req, res) => {
 });
 
 app.listen(3000, () => {
-  console.log("Mangá Donwload by Marcelo-maga")
+  console.log("Manga Download by Marcelo-maga")
 })
 
 // Main function
