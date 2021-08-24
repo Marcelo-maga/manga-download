@@ -3,35 +3,37 @@ const puppeteer = require('puppeteer-extra')
 const StealthPlugin = require('puppeteer-extra-plugin-stealth')
 puppeteer.use(StealthPlugin())
 
-async function getCaps(id) {
-  var data = { "chapters": [] }
+async function getCaps(id, i) {
+    var mangaData = {
+      "chapters": [] 
+    }
 
   try {
 
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
-    await page.goto(`https://mangalivre.net/series/chapters_list.json?page=1&id_serie=224`);
+    await page.goto(`https://mangalivre.net/series/chapters_list.json?page=${i}&id_serie=${id}`);
 
-    innerText = await page.evaluate(() => {
+    results = await page.evaluate(() => {
       return JSON.parse(document.querySelector("body").innerText ); 
     })
+
     await browser.close();
 
-    if(innerText.chapters){
-      data.id_serie = innerText.chapters[0].id_serie;
-      data.name = innerText.chapters[0].name;
+    if(results.chapters){
+      mangaData.id_serie = results.chapters[0].id_serie;
+      mangaData.name = results.chapters[0].name;
 
-      for(let chapter of innerText.chapters){
-        data.chapters.push({
-          "chapter_name": chapter.chapter_name,
+      for(let chapter of results.chapters){
+        mangaData.chapters.push({
           "number": chapter.number,
           "id_release": chapter.releases[Object.keys(chapter.releases)[0]].id_release
         })
       }
     }
-
-    console.log(data)
-
+    return(
+      mangaData
+    )
   } catch (error) {
     console.log(error)
   }
