@@ -1,4 +1,5 @@
 var ARGS = process.argv.slice(2)
+
 const functions = require('./functions')
 
 const puppeteer = require('puppeteer-extra')
@@ -11,11 +12,15 @@ const app = exprsss()
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
-app.get(`/main/:id/`, async (req, res) => {
+app.get(`/:id/`, async (req, res) => {
   const id = req.params.id
+
+  var capIni = ARGS[1]
+  var capFin = ARGS[2]
 
   let mangaData = {
     "id_serie": undefined,
+    "url_name": undefined,
     "name": undefined,
     "chapters": []
   }
@@ -26,6 +31,7 @@ app.get(`/main/:id/`, async (req, res) => {
     if (!mangaData.name) { 
       mangaData.id_serie = results.id_serie
       mangaData.name = results.name
+      mangaData.url_name = results.url_name;
     }
   
     if (results.chapters.length > 0) {
@@ -34,8 +40,10 @@ app.get(`/main/:id/`, async (req, res) => {
     }
     break
   }
+
   console.log(mangaData)
-});
+  functions.getImages(224, mangaData.url_name, 41)
+})
 
 app.listen(3000, () => {
   console.log("Manga Download by Marcelo-maga")
@@ -46,7 +54,8 @@ async function mangaDownload() {
 
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
-  await page.goto(`http://localhost:3000/main/${ ARGS[0] }`);
+  await page.setDefaultNavigationTimeout(0)
+  await page.goto(`http://localhost:3000/${ ARGS[0] }/`);
 
   await browser.close();
 }

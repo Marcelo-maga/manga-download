@@ -1190,6 +1190,11 @@ pupa@^2.0.1:
   dependencies:
     escape-goat "^2.0.0"
 
+puppeteer-autoscroll-down@^0.1.7:
+  version "0.1.7"
+  resolved "https://registry.yarnpkg.com/puppeteer-autoscroll-down/-/puppeteer-autoscroll-down-0.1.7.tgz#27974585e12d948ccfb5075d2de056a51e0bef16"
+  integrity sha512-DibYxWkrmRDn9QT7ggoELpu0TuIdS7OLRx2fB01uRVG8HNB6U4+3mgxNmhHPpxyN4Sy0e7KvHACOz5tv/BtmXA==
+
 puppeteer-extra-plugin-stealth@^2.7.8:
   version "2.7.8"
   resolved "https://registry.yarnpkg.com/puppeteer-extra-plugin-stealth/-/puppeteer-extra-plugin-stealth-2.7.8.tgz#7424c955e25351a55024734477059c988647047c"
