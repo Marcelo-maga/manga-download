@@ -1,4 +1,6 @@
 const puppeteer = require('puppeteer-extra')
+const got = require('got');
+const { scrollPageToBottom } = require('puppeteer-autoscroll-down')
 
 const StealthPlugin = require('puppeteer-extra-plugin-stealth')
 puppeteer.use(StealthPlugin())
@@ -44,19 +46,29 @@ async function getCaps(id, i) {
 
 async function getImages(release_id, url_name, capAtu) {
   
-  var list
-
   const browser = await puppeteer.launch({ headless: false })
   const page = await browser.newPage()
   await page.setDefaultNavigationTimeout(0)
   await page.goto(`https://mangalivre.net/ler/${url_name}/online/${release_id}/capitulo-${capAtu}#/`)
 
   await page.click('a.orientation')
+  await page.waitForTimeout(3000)
 
+  // Recurso técnico alternativo!
+  async function fe(){
+    var steps = 999*1000
+    while(true){
+      for(i=1; i<10; i++){
+        page.mouse.wheel({ deltaY: +steps })
+        await page.waitForTimeout(1000)
+      }
+      break
+    }
+  }
+
+  await fe()
 
 }
-
-
 module.exports = {
   getCaps: getCaps,
   getImages: getImages

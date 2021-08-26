@@ -41,6 +41,7 @@ app.get(`/:id/`, async (req, res) => {
     break
   }
 
+
   console.log(mangaData)
   functions.getImages(224, mangaData.url_name, 41)
 })
