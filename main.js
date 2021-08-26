@@ -1,4 +1,6 @@
 const puppeteer = require('puppeteer-extra')
+const fs = require('fs-extra')
+const request = require('request')
 
 const StealthPlugin = require('puppeteer-extra-plugin-stealth')
 puppeteer.use(StealthPlugin())
@@ -49,10 +51,8 @@ async function getImages(release_id, capAtu) {
   }
 
 
-
-
   // Inicio da função
-  const browser = await puppeteer.launch({ headless: false })
+  const browser = await puppeteer.launch()
   const page = await browser.newPage()
   await page.setDefaultNavigationTimeout(0)
   await page.goto(`https://mangalivre.net/ler/null/online/${release_id}/capitulo-${capAtu}#/`)
@@ -63,8 +63,11 @@ async function getImages(release_id, capAtu) {
   await scroll()
 
   const imgs = await page.$$eval('.manga-image img[src]', imgs => imgs.map(img => img.getAttribute('src')))
-  console.log(imgs)
   await browser.close()
+
+  Object.keys(imgs).map((img) => {
+    
+  })
 }
 
 
