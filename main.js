@@ -18,6 +18,7 @@ async function getCaps(id, i) {
       return JSON.parse(document.querySelector("body").innerText ); 
     })
 
+    await browser.close()
 
     if(results.chapters){
       mangaData.id_serie = results.chapters[0].id_serie;
@@ -34,12 +35,12 @@ async function getCaps(id, i) {
 }
 
 async function getImages(release_id, capAtu) {
-  
+
   // função de scroll para carregar as páginas
   async function scroll(){
     var steps = 9999*1000
     while(true){
-      for(i=1; i<20; i++){
+      for(i=1; i<25; i++){
         page.mouse.wheel({ deltaY: +steps })
         await page.waitForTimeout(1000)
       }
@@ -51,7 +52,7 @@ async function getImages(release_id, capAtu) {
 
 
   // Inicio da função
-  const browser = await puppeteer.launch()
+  const browser = await puppeteer.launch({ headless: false })
   const page = await browser.newPage()
   await page.setDefaultNavigationTimeout(0)
   await page.goto(`https://mangalivre.net/ler/null/online/${release_id}/capitulo-${capAtu}#/`)
@@ -62,7 +63,8 @@ async function getImages(release_id, capAtu) {
   await scroll()
 
   const imgs = await page.$$eval('.manga-image img[src]', imgs => imgs.map(img => img.getAttribute('src')))
-  
+  console.log(imgs)
+  await browser.close()
 }
 
 
