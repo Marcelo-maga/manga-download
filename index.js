@@ -1,6 +1,6 @@
 var ARGS = process.argv.slice(2)
 
-const functions = require('./functions')
+const main = require('./main')
 
 const puppeteer = require('puppeteer-extra')
 process.setMaxListeners(Infinity)
@@ -13,6 +13,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
 app.get(`/:id/`, async (req, res) => {
+
   const id = req.params.id
 
   var capIni = ARGS[1]
@@ -24,14 +25,13 @@ app.get(`/:id/`, async (req, res) => {
     "name": undefined,
     "chapters": []
   }
-  
+
   for(let i = 1; ; i++){
-    var results = await functions.getCaps(id, i)
-  
+    var results = await main.getCaps(id, i)
+
     if (!mangaData.name) { 
       mangaData.id_serie = results.id_serie
       mangaData.name = results.name
-      mangaData.url_name = results.url_name;
     }
   
     if (results.chapters.length > 0) {
@@ -41,13 +41,26 @@ app.get(`/:id/`, async (req, res) => {
     break
   }
 
+  console.log('Todos foram localizados!')
+  console.log(`Iniciando o download do capítulo ${capIni} ao ${capFin}`)
 
-  console.log(mangaData)
-  functions.getImages(224, mangaData.url_name, 41)
+  while(capIni <= capFin){
+    var capAtu = capIni
+
+    const releaseId = mangaData.chapters.find(number => number.number == `${capAtu}`)
+    
+    await main.getImages(releaseId.id_release, capAtu)
+    capAtu++
+    capIni++
+  }
+
+  console.log('Todos os capítulos foram baixados!')
+  process.exit()
 })
 
 app.listen(3000, () => {
-  console.log("Manga Download by Marcelo-maga")
+  console.log(" --- Manga Download by Marcelo-maga --- ")
+  console.log('Localizando os capítulos disponíveis, aguarde!')
 })
 
 // Main function
@@ -60,4 +73,5 @@ async function mangaDownload() {
 
   await browser.close();
 }
+
 mangaDownload()
