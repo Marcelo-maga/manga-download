@@ -1,6 +1,4 @@
 const puppeteer = require('puppeteer-extra')
-const got = require('got');
-const { scrollPageToBottom } = require('puppeteer-autoscroll-down')
 
 const StealthPlugin = require('puppeteer-extra-plugin-stealth')
 puppeteer.use(StealthPlugin())
@@ -67,6 +65,9 @@ async function getImages(release_id, url_name, capAtu) {
   }
 
   await fe()
+
+  const imgs = await page.$$eval('.manga-image img[src]', imgs => imgs.map(img => img.getAttribute('src')));
+  console.log(imgs)
 
 }
 module.exports = {
