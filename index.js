@@ -26,6 +26,8 @@ app.get(`/:id/`, async (req, res) => {
     "chapters": []
   }
 
+
+
   for(let i = 1; ; i++){
     var results = await main.getCaps(id, i)
 
@@ -49,6 +51,8 @@ app.get(`/:id/`, async (req, res) => {
 
     const releaseId = mangaData.chapters.find(number => number.number == `${capAtu}`)
     
+    
+
     await main.getImages(releaseId.id_release, capAtu)
     capAtu++
     capIni++
@@ -58,7 +62,7 @@ app.get(`/:id/`, async (req, res) => {
   process.exit()
 })
 
-app.listen(3000, () => {
+app.listen(3000, () => {  
   console.log(" --- Manga Download by Marcelo-maga --- ")
   console.log('Localizando os capítulos disponíveis, aguarde!')
 })

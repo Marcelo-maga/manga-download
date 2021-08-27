@@ -1,6 +1,6 @@
 const puppeteer = require('puppeteer-extra')
-const fs = require('fs-extra')
-const request = require('request')
+const fs = require('fs')
+const https = require('https')
 
 const StealthPlugin = require('puppeteer-extra-plugin-stealth')
 puppeteer.use(StealthPlugin())
@@ -11,7 +11,7 @@ async function getCaps(id, i) {
       "chapters": [] 
     }
 
-    const browser = await puppeteer.launch()
+    const browser = await puppeteer.launch({ headless: false })
     const page = await browser.newPage()
     await page.setDefaultNavigationTimeout(0)
     await page.goto(`https://mangalivre.net/series/chapters_list.json?page=${i}&id_serie=${id}`)
@@ -20,7 +20,7 @@ async function getCaps(id, i) {
       return JSON.parse(document.querySelector("body").innerText ); 
     })
 
-    await browser.close()
+    // await browser.close()
 
     if(results.chapters){
       mangaData.id_serie = results.chapters[0].id_serie;
@@ -33,6 +33,7 @@ async function getCaps(id, i) {
         })
       }
     }
+    console.log(mangaData[0])
     return mangaData
 }
 
@@ -50,6 +51,17 @@ async function getImages(release_id, capAtu) {
     }
   }
 
+  // função donwload
+  async function donwload(imgs, key) {
+    let url = imgs[key]
+    https.get(url, function(res) {
+      const fileStream = fs.createWriteStream(`Page${key}.jpg`)
+      res.pipe(fileStream)
+      fileStream.on("finish", function (){
+        fileStream.close()
+      })
+    })
+  }
 
   // Inicio da função
   const browser = await puppeteer.launch()
@@ -61,13 +73,13 @@ async function getImages(release_id, capAtu) {
   await page.waitForTimeout(3000)
 
   await scroll()
-
+  
   const imgs = await page.$$eval('.manga-image img[src]', imgs => imgs.map(img => img.getAttribute('src')))
-  await browser.close()
-
-  Object.keys(imgs).map((img) => {
-    
+  Object.keys(imgs).forEach( async function (key) {
+    await donwload(imgs, key)
   })
+  
+  await browser.close()
 }
 
 
