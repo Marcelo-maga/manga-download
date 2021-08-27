@@ -19,7 +19,6 @@
     "express": "^4.17.1",
     "https": "^1.0.0",
     "images-pdf": "^1.0.3",
-    "pdfkit": "^0.12.3",
     "puppeteer": "^10.2.0",
     "puppeteer-extra": "^3.1.18",
     "puppeteer-extra-plugin-stealth": "^2.7.8"
