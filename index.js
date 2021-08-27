@@ -1,7 +1,7 @@
 var ARGS = process.argv.slice(2)
 
 const main = require('./main')
-
+const fs = require('fs')
 const puppeteer = require('puppeteer-extra')
 process.setMaxListeners(Infinity)
 
@@ -26,8 +26,6 @@ app.get(`/:id/`, async (req, res) => {
     "chapters": []
   }
 
-
-
   for(let i = 1; ; i++){
     var results = await main.getCaps(id, i)
 
@@ -47,12 +45,10 @@ app.get(`/:id/`, async (req, res) => {
   console.log(`Iniciando o download do capítulo ${capIni} ao ${capFin}`)
 
   while(capIni <= capFin){
-    var capAtu = capIni
+    let capAtu = capIni
 
     const releaseId = mangaData.chapters.find(number => number.number == `${capAtu}`)
     
-    
-
     await main.getImages(releaseId.id_release, capAtu)
     capAtu++
     capIni++
