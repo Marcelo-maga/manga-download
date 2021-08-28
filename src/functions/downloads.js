@@ -12,5 +12,5 @@ module.exports = async (imgs, key, capAtu, mangaName) => {
       fileStream.close()
     })
   })
-  await createPdf('images/', `${mangaName}`, `cap${capAtu - 1}.pdf`)
+  await createPdf('images/', `${mangaName}`, `cap${capAtu}.pdf`)
 }
