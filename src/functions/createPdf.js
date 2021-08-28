@@ -3,10 +3,11 @@ const image_size = require('image-size')
 const pdfkit = require('pdfkit');
 const naturalCompare = require("natural-compare-lite")
 
-module.exports = async (folder, outputPath) => {
+module.exports = async (folder, mangaName, outputPath) => {
   let doc = new pdfkit
-  fs.readdir(folder, function (_, files){
-    files.sort(naturalCompare).forEach( function (file, index){
+  let dir = `${mangaName}/`
+  fs.readdir(folder, async function (_, files){
+    files.sort(naturalCompare).forEach( async function (file, index){
       const filePath = `${folder}/${file}`;
         const size = image_size(filePath);
         if (index === 0) {
@@ -19,7 +20,10 @@ module.exports = async (folder, outputPath) => {
 
         doc.image(filePath, 0, 0, { width: size.width, height: size.height });
     });
-    doc.pipe(fs.createWriteStream(outputPath));
-    doc.end();
+    fs.ensureDirSync(dir)
+
+
+    doc.pipe(fs.createWriteStream(`${mangaName}/${outputPath}`))
+    doc.end()
   })
 }

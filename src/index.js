@@ -17,8 +17,6 @@ app.get(`/:id/`, async (req) => {
 
   const idSerie = req.params.id
   await apiPage(idSerie)
-  process.exit()
-
 })
 
 app.listen(3000, () => {  

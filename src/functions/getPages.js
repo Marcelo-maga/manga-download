@@ -1,3 +1,5 @@
+const fs = require('fs-extra')
+
 const donwload = require('./downloads')
 const createPdf = require('./createPdf')
 
@@ -5,7 +7,7 @@ const puppeteer = require('puppeteer-extra')
 const StealthPlugin = require('puppeteer-extra-plugin-stealth')
 puppeteer.use(StealthPlugin())
 
-module.exports = async (release_id, capAtu) => {
+module.exports = async (release_id, capAtu, mangaName) => {
   
   // Função de scroll para carregar as imanges
   async function scroll(){
@@ -25,6 +27,7 @@ module.exports = async (release_id, capAtu) => {
   await page.setDefaultNavigationTimeout(0)
   await page.goto(`https://mangalivre.net/ler/null/online/${release_id}/capitulo-${capAtu}#/`)
 
+
   await page.click('a.orientation')
   await page.waitForTimeout(3000)
 
@@ -32,8 +35,7 @@ module.exports = async (release_id, capAtu) => {
   
   const imgs = await page.$$eval('.manga-image img[src]', imgs => imgs.map(img => img.getAttribute('src')))
   Object.keys(imgs).forEach( async function (key) {
-    await donwload(imgs, key, capAtu)
-    await createPdf('images/', '1.pdf')
+    await donwload(imgs, key, capAtu, mangaName)
   })  
   await browser.close()
 
