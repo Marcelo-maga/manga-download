@@ -34,9 +34,8 @@ module.exports = async (release_id, capAtu, mangaName) => {
   await scroll()
   
   const imgs = await page.$$eval('.manga-image img[src]', imgs => imgs.map(img => img.getAttribute('src')))
+  await browser.close()
   Object.keys(imgs).forEach( async function (key) {
     await donwload(imgs, key, capAtu, mangaName)
-  })  
-  await browser.close()
-
+  })
 }
